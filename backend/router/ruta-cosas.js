@@ -36,8 +36,14 @@ router.post("/nueva", async (req, res, next) => {
   if (casa && existeCasa) {
     return res.json({ message: "La cosa ya está asignada a otra casa" });
   }
+
   if (cajon) {
     existeCajon = await Cajon.findOne({ nombre: cajon });
+    if (!existeCajon) {
+      return res.json({
+        message: `${nombre} debe estar guardado en un cajón existente`,
+      });
+    }
     existeArmario = await Armario.findById(existeCajon.armario);
     existeHabitacion = await Habitacion.findById(existeArmario.habitacion);
     existeCasa = await Casa.findById(existeHabitacion.casa);
@@ -56,6 +62,7 @@ router.post("/nueva", async (req, res, next) => {
         "Se debe especificar al menos una propiedad de ubicación (cajón, armario, habitación, casa)",
     });
   }
+
   const cosa = new Cosa({
     nombre,
     descripcion,
