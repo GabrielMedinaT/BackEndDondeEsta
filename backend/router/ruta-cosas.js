@@ -32,6 +32,7 @@ router.post("/nueva", async (req, res, next) => {
     habitacion,
     casa,
     caja,
+    prestado,
   } = req.body;
   if (casa && existeCasa) {
     return res.json({ message: "La cosa ya está asignada a otra casa" });
@@ -71,6 +72,7 @@ router.post("/nueva", async (req, res, next) => {
     armario: existeArmario ? existeArmario._id : undefined,
     habitacion: existeHabitacion ? existeHabitacion._id : undefined,
     casa: existeCasa ? existeCasa._id : undefined,
+    prestado,
     caja,
   });
   try {

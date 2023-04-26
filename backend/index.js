@@ -23,7 +23,7 @@ app.use("/api/cajas/", caja);
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.USER}:${process.env.CONTRA}@cluster0.hxvguno.mongodb.net/dondeEsta?retryWrites=true&w=majority`
+    `mongodb+srv://entropia7:Aguascalientes2024@cluster0.hxvguno.mongodb.net/dondeEsta?retryWrites=true&w=majority`
   )
   .then(() =>
     app.listen(5000, () =>
