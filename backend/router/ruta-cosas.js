@@ -155,7 +155,7 @@ router.patch("/editar/:nombre", async (req, res, next) => {
   }
 
   await Cajon.findByIdAndUpdate(existeCosa.cajon, {
-    $pull: { cosas: existeCosa._id },
+    $pull: { cosas: existeCosa._id, new: true },
   });
   await Armario.findByIdAndUpdate(existeCosa.armario, {
     $pull: { cosas: existeCosa._id },
@@ -231,11 +231,11 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
   let existeCasa = await Casa.findById(existeCosa.casa);
   if (!existeCosa) {
     res.json({ message: "La cosa no existe" });
-    return;
+    return next();
   }
   if (existeCajon) {
     await Cajon.findByIdAndUpdate(existeCajon._id, {
-      $pull: { cosas: existeCosa._id },
+      $pull: { cosas: existeCosa._id, new: true },
     });
   }
   if (existeArmario) {
