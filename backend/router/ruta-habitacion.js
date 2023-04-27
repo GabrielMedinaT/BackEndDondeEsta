@@ -85,49 +85,17 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 
 //*ELIMINAR HABITACIÓN
 router.delete("/borrar/:nombre", async (req, res, next) => {
-  const session = await mongoose.startSession();
+  existeHabitacion = await Habitacion.findOne({ nombre: req.params.nombre });
+  if (!existeHabitacion) {
+    res.json({ message: "No existe la habitación" });
+    return next();
+  }
   try {
-    await session.withTransaction(async () => {
-      const { nombrecasa } = req.body;
-      const { nombre } = req.params;
-      const habitacion = await Habitacion.findOne({ nombre: nombre });
-      if (!habitacion) {
-        res.json({ message: "No existe la habitación" });
-        return next();
-      }
-      const existeCasa = await Casa.findOne({ casa: nombrecasa });
-      if (!existeCasa) {
-        res.json({ message: "No existe la casa" });
-        return next();
-      }
-      const casa = await Casa.findOne({ habitaciones: habitacion._id });
-      // Buscar todos los armarios que pertenecen a la habitación
-      const armariosBuscar = await Armarios.find({
-        habitacion: habitacion._id,
-      }).session(session);
-      // Eliminar todos los cajones que se encuentran en esos armarios
-      const armariosIds = armariosBuscar.map((armario) => armario._id);
-      await Cajon.deleteMany({ armario: { $in: armariosIds } }).session(
-        session
-      );
-      // Eliminar todos los armarios de la habitación
-      await Armarios.deleteMany({
-        habitacion: habitacion._id,
-      }).session(session);
-      // Eliminar la habitación
-      await Habitacion.deleteOne({ _id: habitacion._id });
-      // Eliminar la habitación de la lista de habitaciones de la casa
-      await Casa.findOneAndUpdate(
-        { _id: casa._id },
-        { $pull: { habitaciones: habitacion._id } }
-      );
-      res.json({ message: "Habitación borrada" });
-    });
+    await Habitacion.findOneAndDelete({ nombre: req.params.nombre });
+    res.json({ message: "Habitación eliminada" });
   } catch (err) {
     res.json({ message: err });
     return next(err);
-  } finally {
-    session.endSession();
   }
 });
 
