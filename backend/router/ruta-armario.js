@@ -137,39 +137,16 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 
 //*BORRAR ARMARIO
 router.delete("/borrar/:nombre", async (req, res, next) => {
+  exiteArmario = await Armario.findOne({ nombre: req.params.nombre });
+  if (!exiteArmario) {
+    res.json({ message: "No existe el armario" });
+    return next();
+  }
   try {
-    // Buscar el armario por nombre
-    const armario = await Armario.findOne({ nombre: req.params.nombre });
-    if (!armario) {
-      return res.json("No existe el armario");
-    }
-    let existeCasa = await Casa.findOne({ _id: armario.casa });
-    if (!existeCasa) {
-      res.json({ message: "No existe la casa" });
-      return next();
-    }
-    // Buscar la habitación en la que se encuentra el armario
-    const habitacion = await Habitacion.findOne({
-      _id: armario.habitacion,
-      casa: existeCasa._id,
-    });
-    if (!habitacion) {
-      return res.json("No existe la habitacion");
-    }
-
-    // Eliminar el ID del armario de la matriz de armarios en la habitación
-    await Habitacion.updateOne(
-      { _id: habitacion._id },
-      { $pull: { armarios: armario._id } }
-    );
-
-    // Eliminar el armario y sus cajones
-    await Armario.deleteOne({ _id: armario._id });
-    await Cajon.deleteMany({ armario: armario._id });
-
-    return res.json("Armario borrado");
+    await Armario.findOneAndDelete({ nombre: req.params.nombre });
+    res.json({ message: "Armario borrado" });
   } catch (err) {
-    res.json({ message: "error final" });
+    res.json({ message: "No se puede borrar el armario" });
     return next(err);
   }
 });
