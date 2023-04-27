@@ -22,9 +22,7 @@ app.use("/api/cosas/", cosas);
 app.use("/api/cajas/", caja);
 
 mongoose
-  .connect(
-    `mongodb+srv://entropia7:Aguascalientes2024@cluster0.hxvguno.mongodb.net/dondeEsta?retryWrites=true&w=majority`
-  )
+  .connect(`${process.env.MONGO_URI}`)
   .then(() =>
     app.listen(5000, () =>
       console.log(
