@@ -17,7 +17,7 @@ router.use(cors());
 
 router.get("/", async (req, res) => {
   try {
-    const casas = await Casa.find().populate("habitaciones");
+    const casas = await Casa.find();
     res.send(casas);
   } catch (err) {
     res.json({ message: "No se puede obtener las casas" });
