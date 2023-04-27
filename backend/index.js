@@ -22,7 +22,7 @@ app.use("/api/cosas/", cosas);
 app.use("/api/cajas/", caja);
 
 mongoose
-  .connect(`${process.env.MONGO_URI}`)
+  .connect(process.env.MONGO_URI)
   .then(() =>
     app.listen(5000, () =>
       console.log(
