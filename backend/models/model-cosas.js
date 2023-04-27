@@ -10,7 +10,7 @@ const cosaSchema = new Schema({
   habitacion: { type: Schema.Types.ObjectId, ref: "Habitacion" },
   casa: { type: Schema.Types.ObjectId, ref: "Casa" },
   caja: { type: Schema.Types.ObjectId, ref: "Caja" },
-  prestado: { type: Boolean, required: true },
+  prestado: { type: Boolean, required: false },
 });
 
 module.exports = mongoose.model("Cosa", cosaSchema);
