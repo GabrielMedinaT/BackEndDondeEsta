@@ -90,9 +90,6 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
     res.json({ message: "No existe la habitación" });
     return next();
   }
-  let casa = await Casa.findOne({ _id: existeHabitacion.casa });
-  casa.habitaciones.pull(existeHabitacion);
-  await casa.save();
 
   try {
     await Habitacion.findOneAndDelete({ nombre: req.params.nombre });
