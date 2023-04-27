@@ -169,7 +169,7 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
 
     return res.json("Armario borrado");
   } catch (err) {
-    res.json({ message: err });
+    res.json({ message: "error final" });
     return next(err);
   }
 });

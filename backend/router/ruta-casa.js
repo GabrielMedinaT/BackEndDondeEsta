@@ -126,6 +126,10 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
       await Casa.findOneAndDelete({ nombre: req.params.nombre }).session(
         session
       );
+      let usuario = await Usuario.findOne({ casas: casaBuscar._id }).session(
+        session
+      );
+      usuario.casas.pull(casaBuscar._id);
 
       res.json({ message: "Casa borrada y cosas asignadas a la nueva caja" });
     });

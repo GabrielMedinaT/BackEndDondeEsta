@@ -14,4 +14,14 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.delete("/eliminar/todas", async (req, res, next) => {
+  try {
+    const cajas = await Caja.deleteMany();
+    res.json(cajas);
+  } catch (err) {
+    res.json({ message: err });
+    return next(err);
+  }
+});
+
 module.exports = router;
