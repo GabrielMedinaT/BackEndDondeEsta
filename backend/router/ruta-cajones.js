@@ -78,29 +78,9 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 //*ELIMINAR CAJON
 router.delete("/eliminar/:nombre", async (req, res, next) => {
   const { nombre } = req.params;
-  let existeArmario;
   let existeCajon;
   try {
     existeCajon = await Cajon.findOne({ nombre: nombre });
-  } catch (err) {
-    res.json({ message: err });
-    return next(err);
-  }
-  try {
-    existeArmario = await Armarios.findOne({ _id: existeCajon.armario });
-  } catch (err) {
-    res.json({ message: err });
-    return next(err);
-  }
-  if (!existeArmario) {
-    return res.json("No existe el armario  ");
-  }
-  try {
-    await Armarios.findOneAndUpdate(
-      { _id: existeArmario._id },
-      { $pull: { cajon: existeCajon._id } },
-      { new: true }
-    );
   } catch (err) {
     res.json({ message: err });
     return next(err);
@@ -109,6 +89,11 @@ router.delete("/eliminar/:nombre", async (req, res, next) => {
     return res.json("No existe el cajon  ");
   }
   try {
+    const nuevaCaja = new Caja({
+      nombre: `${existeCajon.armario.nombre}-${existeCajon.nombre}`,
+      cosas: Cosas,
+    });
+
     await Cajon.findOneAndDelete({ _id: existeCajon._id });
     res.json("Cajon eliminado");
     next();
