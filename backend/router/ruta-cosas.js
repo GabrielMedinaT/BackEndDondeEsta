@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const cosas = await Cosa.find();
+    const cosas = await Cosa.find().populate("cajon");
     res.send(cosas);
   } catch (err) {
     res.json({ message: err });
