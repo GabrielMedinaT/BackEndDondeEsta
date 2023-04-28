@@ -1,0 +1,549 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "proyecto en LOCAL",
+    "dateExported": "2023-04-28T13:40:48.819Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "casas",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.715Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "2ed68bee-bf01-4a94-983b-8deead16ce20",
+            "name": "habitaciones",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.716Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "761c3fff-88f1-4f0c-94cc-54a92c9f02d0",
+            "name": "armarios",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.717Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "2c878299-1e86-4226-baeb-308164a19559",
+            "name": "cajones",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.718Z",
+            "sortNum": 45000
+        },
+        {
+            "_id": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "cosas",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.719Z",
+            "sortNum": 50000
+        },
+        {
+            "_id": "f92ef82e-a30b-462a-a5d7-30c9e32770a0",
+            "name": "Caja",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.720Z",
+            "sortNum": 55000
+        },
+        {
+            "_id": "9fa83be9-12b9-4c41-877b-3971b4ae33cb",
+            "name": "usuarios",
+            "containerId": "",
+            "created": "2023-04-28T08:52:15.721Z",
+            "sortNum": 60000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "6e307934-b516-4a92-a992-a4165fa8b9b8",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "761c3fff-88f1-4f0c-94cc-54a92c9f02d0",
+            "name": "Ver Armarios",
+            "url": "http://localhost:5000/api/armarios/",
+            "method": "GET",
+            "sortNum": 5000,
+            "created": "2023-04-28T08:52:15.715Z",
+            "modified": "2023-04-28T08:54:50.996Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "ee662d52-78f8-4a8a-b8a9-8836473baa2c",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2c878299-1e86-4226-baeb-308164a19559",
+            "name": "Ver cajones ",
+            "url": "http://localhost:5000/api/cajones/",
+            "method": "GET",
+            "sortNum": 5000,
+            "created": "2023-04-28T08:52:15.716Z",
+            "modified": "2023-04-28T08:55:14.043Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "042ff7d6-1cbd-46a6-9c87-c719102a568b",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "9fa83be9-12b9-4c41-877b-3971b4ae33cb",
+            "name": "ver usuarios",
+            "url": "http://localhost:5000/api/usuarios",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-04-28T08:52:15.717Z",
+            "modified": "2023-04-28T09:26:01.179Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "eeba8240-b77d-445c-ba01-37ec98df0aa2",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "ver casas",
+            "url": "http://localhost:5000/api/casas/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-04-28T08:52:15.718Z",
+            "modified": "2023-04-28T13:33:10.853Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiYzc3MzAyM2IxM2U2MjkwNjc5YTgiLCJlbWFpbCI6ImdhYnJpZWxtZWRpbmF0b3JyZXNAaG90bWFpbC5jb20iLCJpYXQiOjE2ODI2ODg3NzYsImV4cCI6MTY4MjY5MjM3Nn0.DArt8uMoexrUZiAUlxb-qd5OagIEcVaUH4I0OPsAuTE"
+            },
+            "tests": []
+        },
+        {
+            "_id": "0a2a8116-8546-4f9c-b3b4-a7651a54a011",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2ed68bee-bf01-4a94-983b-8deead16ce20",
+            "name": "ver habitaciones",
+            "url": "http://localhost:5000/api/habitaciones/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-04-28T08:52:15.719Z",
+            "modified": "2023-04-28T08:54:16.208Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "d6e61540-9643-433a-bcb1-5185451f48b7",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "761c3fff-88f1-4f0c-94cc-54a92c9f02d0",
+            "name": "Crear armario",
+            "url": "http://localhost:5000/api/armarios/nuevo",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-04-28T08:52:15.720Z",
+            "modified": "2023-04-28T08:54:57.240Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nombre\": \"mesa\",\n  \"casa\":\"Arucas\",\n  \"habitacion\": \"sala\"\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2502c1da-f317-4c24-bfe6-09d6ac7efc8f",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2c878299-1e86-4226-baeb-308164a19559",
+            "name": "Crear cajones",
+            "url": "http://localhost:5000/api/cajones/nuevo",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-04-28T08:52:15.721Z",
+            "modified": "2023-04-28T09:56:49.555Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nombre\": \"segundo\",\n  \n  \"armario\":\"mesa\"\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "191068ec-1bb8-4ef0-ada2-32f338724954",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "Ver cosas que hay en una casa",
+            "url": "http://localhost:5000/api/casas/Arucas",
+            "method": "GET",
+            "sortNum": 11250,
+            "created": "2023-04-28T08:52:15.722Z",
+            "modified": "2023-04-28T08:53:48.641Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDQ3ZDEwMTM2MWE0NWVkMGMxOTcxODQiLCJpYXQiOjE2ODI0Mjg0NDIsImV4cCI6MTY4MjQzMjA0Mn0.l7NIN8l0llRtkl_mOjbEOy3OKOHagcTkr_NwnuWF5PY"
+            },
+            "tests": []
+        },
+        {
+            "_id": "97a4bd04-8acd-4b8e-89a4-73e46363686b",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "crear casa",
+            "url": "http://localhost:5000/api/casas/nueva",
+            "method": "POST",
+            "sortNum": 12500,
+            "created": "2023-04-28T08:52:15.723Z",
+            "modified": "2023-04-28T13:24:10.033Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nombre\":\"Arucas\",\n  \"direccion\":\"Calle la pantera 3\",\n  \"ciudad\":\"Las Palmas\",\n  \"usuario\":\"gabrielmedinatorres@hotmail.com\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiYzc3MzAyM2IxM2U2MjkwNjc5YTgiLCJlbWFpbCI6ImdhYnJpZWxtZWRpbmF0b3JyZXNAaG90bWFpbC5jb20iLCJpYXQiOjE2ODI2ODc4NjQsImV4cCI6MTY4MjY5MTQ2NH0.CEvU5sV6IATZgmoBs1QR4QvgMKjS_z5bmFfaFj0Xc8M"
+            },
+            "tests": []
+        },
+        {
+            "_id": "21acdc84-94cd-428e-87ad-0ebdefcd92f0",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "Editar Casa",
+            "url": "http://localhost:5000/api/casas/editar/Cardones",
+            "method": "PATCH",
+            "sortNum": 13750,
+            "created": "2023-04-28T08:52:15.724Z",
+            "modified": "2023-04-28T08:52:15.724Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\"nuevoNombre\":\"Tejeda\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2NDNmYjRkOWJhYzJiNjA4YzBiY2IyMTIiLCJlbWFpbCI6Im1pY2FzYTZAZ21haWwuY29tIiwiaWF0IjoxNjgxODk2NjY2LCJleHAiOjE2ODE5MDAyNjZ9.fbja1bQzx0Hvxsuf5eIlfL_vbHajNGV49h3A03eVvII"
+            },
+            "tests": []
+        },
+        {
+            "_id": "c7737ead-4419-410b-86ce-871649aab0e7",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "ccffc2ee-cbad-4bc5-ba7e-135a1f0bd6b0",
+            "name": "borrar casa",
+            "url": "http://localhost:5000/api/casas/borrar/Arucas",
+            "method": "DELETE",
+            "sortNum": 15000,
+            "created": "2023-04-28T08:52:15.725Z",
+            "modified": "2023-04-28T09:32:53.881Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDQ3Yzg3ODY2OWIwM2FjODE5OGYxNWEiLCJpYXQiOjE2ODI0MjY1OTMsImV4cCI6MTY4MjQzMDE5M30.nbOTV9951Li4uGpYFHfm5MG_O-WA-98RXx7Lm1eBvFE"
+            },
+            "tests": []
+        },
+        {
+            "_id": "857c84bb-ab0b-4079-9f50-3aa0cf2be970",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "9fa83be9-12b9-4c41-877b-3971b4ae33cb",
+            "name": "Borrar Usuarios",
+            "url": "http://localhost:5000/api/usuarios/borrar/gabrielmedinatorres@hotmail.com",
+            "method": "DELETE",
+            "sortNum": 15000,
+            "created": "2023-04-28T08:52:15.726Z",
+            "modified": "2023-04-28T13:14:47.830Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2NDQxMDYzY2M5ZjVkNjQxNGY5ZGE0ZjIiLCJlbWFpbCI6Im1pY2FzYThAZ21haWwuY29tIiwiaWF0IjoxNjgxOTgzMDM2LCJleHAiOjE2ODE5ODMwOTZ9.gDpjLYeA2_MjP7XekKhYlmjBC8Nla1bMqr1AzYxZsYk"
+            },
+            "tests": []
+        },
+        {
+            "_id": "181071d4-f19d-4ad9-b1a3-b1d8a7d18653",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "9fa83be9-12b9-4c41-877b-3971b4ae33cb",
+            "name": "crear usuario",
+            "url": "http://localhost:5000/api/usuarios/registro",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-04-28T08:52:15.727Z",
+            "modified": "2023-04-28T13:17:39.349Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nombre\":\"Gabriel\",\n  \"email\": \"gabrielmedinatorres@hotmail.com\",\n  \"password\": \"asdf4321\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "fecf1253-def2-48ab-8372-2844927ca07c",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2ed68bee-bf01-4a94-983b-8deead16ce20",
+            "name": "Crear Habitacion",
+            "url": "http://localhost:5000/api/habitaciones/nueva",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-04-28T08:52:15.728Z",
+            "modified": "2023-04-28T09:59:43.006Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"casa\": \"Arucas\",\n  \"nombre\":\"salon\"\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6bd12951-82f2-4f31-bad4-1adbded911b0",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "761c3fff-88f1-4f0c-94cc-54a92c9f02d0",
+            "name": "Modificar armario",
+            "url": "http://localhost:5000/api/armarios/editar/mesa",
+            "method": "PATCH",
+            "sortNum": 20000,
+            "created": "2023-04-28T08:52:15.729Z",
+            "modified": "2023-04-28T11:21:25.392Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n  \"nuevoNombre\": \"mesa2\",\n  \"habitacion\": \"salon\",\n  \"casa\":\"Arucas\"\n}\n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "69df1b3c-169b-474a-a069-c060dc9ad482",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2c878299-1e86-4226-baeb-308164a19559",
+            "name": "Modificar cajon",
+            "url": "http://localhost:5000/api/cajones/editar/segundo",
+            "method": "PATCH",
+            "sortNum": 20000,
+            "created": "2023-04-28T08:52:15.730Z",
+            "modified": "2023-04-28T09:14:36.607Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nuevoNombre\": \"primero\"\n\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9371aff6-b097-410c-accd-05fa5361227e",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "9fa83be9-12b9-4c41-877b-3971b4ae33cb",
+            "name": "login usuario",
+            "url": "http://localhost:5000/api/usuarios/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-04-28T08:52:15.731Z",
+            "modified": "2023-04-28T13:13:38.643Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"email\": \"gabrielmedinatorres@hotmail.com\",\n  \"password\": \"asdf4321\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "fb35a6c3-3840-45bf-9896-54ad56d7f791",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "761c3fff-88f1-4f0c-94cc-54a92c9f02d0",
+            "name": "Eliminar Armario",
+            "url": "http://localhost:5000/api/armarios/borrar/mesa",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2023-04-28T08:52:15.732Z",
+            "modified": "2023-04-28T08:55:06.490Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "94275abd-885c-4677-a318-c2ec67a83c45",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2ed68bee-bf01-4a94-983b-8deead16ce20",
+            "name": "Editar Habitacion",
+            "url": "http://localhost:5000/api/habitaciones/editar/dormitorio",
+            "method": "PATCH",
+            "sortNum": 30000,
+            "created": "2023-04-28T08:52:15.733Z",
+            "modified": "2023-04-28T08:54:30.201Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n  \"nuevoNombre\":\"Habitacion\"\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "405f25e2-4d96-4087-96b4-372ea22da021",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2c878299-1e86-4226-baeb-308164a19559",
+            "name": "Eliminar cajon",
+            "url": "http://localhost:5000/api/cajones/eliminar/tercero",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2023-04-28T08:52:15.734Z",
+            "modified": "2023-04-28T08:52:15.734Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "410b8e6d-c74c-4bdd-9212-7d9d282768d6",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "2ed68bee-bf01-4a94-983b-8deead16ce20",
+            "name": "Borrar Habitacion",
+            "url": "http://localhost:5000/api/habitaciones/borrar/sala",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-04-28T08:52:15.735Z",
+            "modified": "2023-04-28T08:54:39.382Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5e0bdcfd-da87-482b-9e38-c45b1b0ea6d0",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Ver cosas",
+            "url": "http://localhost:5000/api/cosas",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-04-28T08:52:15.736Z",
+            "modified": "2023-04-28T08:56:05.270Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "a9eb384e-7837-4988-8d32-2500e380e0ee",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Ver por tipo",
+            "url": "http://localhost:5000/api/cosas/clase/libro",
+            "method": "GET",
+            "sortNum": 55000,
+            "created": "2023-04-28T11:29:26.267Z",
+            "modified": "2023-04-28T11:40:29.949Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2def7c17-2449-4ffe-8016-cdeb6ebd51fa",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Crear cosas",
+            "url": "http://localhost:5000/api/cosas/nuevo/",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2023-04-28T08:52:15.737Z",
+            "modified": "2023-04-28T11:27:55.889Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nombre\":\"cargador\",\n  \"descripcion\":\"para el movil\",\n  \"clasificacion\":\"herramienta\",\n  \"armario\":\"mesa\",\n  \"casa\":\"Arucas\"\n  \n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2c7533da-0b89-4717-8bfa-d8818aecda8c",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Eliminar cosas",
+            "url": "http://localhost:5000/api/cosas/borrar/cargador",
+            "method": "DELETE",
+            "sortNum": 60000,
+            "created": "2023-04-28T08:52:15.738Z",
+            "modified": "2023-04-28T08:58:01.627Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "b6220cb3-1c75-4899-ac2e-7a43c8f03b23",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Modificar cosa",
+            "url": "http://localhost:5000/api/cosas/editar/cargador",
+            "method": "PATCH",
+            "sortNum": 60000,
+            "created": "2023-04-28T08:52:15.739Z",
+            "modified": "2023-04-28T11:13:53.699Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\n  \"cajon\":\"segundo\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "26f2ac81-d715-477e-b4d4-a8c5f6213f66",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "c88d41e6-9bd1-48df-aebf-5880aea8f862",
+            "name": "Eliminar cosas Copy",
+            "url": "http://localhost:5000/api/cosas/borrar/todo/todo",
+            "method": "DELETE",
+            "sortNum": 60000,
+            "created": "2023-04-28T09:30:53.932Z",
+            "modified": "2023-04-28T09:32:00.885Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "cdbdd059-8f6b-4d89-a589-8ffda4f42122",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "f92ef82e-a30b-462a-a5d7-30c9e32770a0",
+            "name": "Ver Cajas",
+            "url": "http://localhost:5000/api/cajas/",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-04-28T08:52:15.740Z",
+            "modified": "2023-04-28T08:58:17.127Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "cd43fd36-a24a-408d-a1f8-33e9f06c62ef",
+            "colId": "8af0a6d1-7764-4e64-be99-7652698cfcc2",
+            "containerId": "f92ef82e-a30b-462a-a5d7-30c9e32770a0",
+            "name": "Borrar todas las cajas",
+            "url": "http://localhost:5000/api/cajas/eliminar/todas",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2023-04-28T08:52:15.741Z",
+            "modified": "2023-04-28T08:58:27.163Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
