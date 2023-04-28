@@ -57,6 +57,8 @@ router.post("/nuevo", async (req, res, next) => {
   }
   const cosa = new Cosa({
     nombre,
+    descripcion,
+    clasificacion,
     cajon: existeCajon ? existeCajon._id : null,
     armario: existeArmario ? existeArmario._id : null,
     habitacion: existeHabitacion ? existeHabitacion._id : null,
