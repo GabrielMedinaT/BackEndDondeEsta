@@ -5,6 +5,7 @@ const Armario = require("../models/model-armario");
 const Cajon = require("../models/model-cajon");
 const cors = require("cors");
 const Cosa = require("../models/model-cosas");
+const Caja = require("../models/model-cajas");
 const express = require("express");
 const router = express.Router();
 
@@ -13,6 +14,16 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const cosas = await Cosa.find().populate("cajon");
+    res.send(cosas);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+
+router.get("/clase/:clase", async (req, res) => {
+  const { clase } = req.params;
+  try {
+    const cosas = await Cosa.find({ clasificacion: clase });
     res.send(cosas);
   } catch (err) {
     res.json({ message: err });
@@ -238,6 +249,7 @@ router.delete("/borrar/todo/todo", async (req, res, next) => {
   await Armario.deleteMany();
   await Habitacion.deleteMany();
   await Casa.deleteMany();
+  await Caja.deleteMany();
 
   res.json({ message: "Todo borrado" });
 });

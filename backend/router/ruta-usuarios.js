@@ -2,7 +2,7 @@ const express = require("express");
 const Usuario = require("../models/model-usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const checkAuth = require("../middleware/checkAuth");
+const checkAuth = require("../middleware/checkAuth").default;
 const router = express.Router();
 const cors = require("cors");
 
@@ -17,58 +17,126 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// * Crear nuevo usuario
 router.post("/registro", async (req, res, next) => {
   const { nombre, email, password } = req.body;
-
+  let existeUsuario;
   try {
-    const existeUsuario = await Usuario.findOne({ email });
-
-    if (existeUsuario) {
-      return res.status(409).json({ message: "El correo ya está registrado" });
+    existeUsuario = await Usuario.findOne({
+      email: email,
+    });
+  } catch (err) {
+    const error = new Error("Error 1");
+    error.code = 500;
+    return next(error);
+  }
+  if (existeUsuario) {
+    const error = new Error("Ya existe un docente con ese e-mail.");
+    error.code = 401;
+    return next(error);
+  } else {
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(password, 12); // ? Método que produce la encriptación
+    } catch (error) {
+      const err = new Error(
+        "No se ha podido crear el docente. Inténtelo de nuevo"
+      );
+      err.code = 500;
+      return next(err);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const usuario = new Usuario({ nombre, email, password: hashedPassword });
-    const usuarioGuardado = await usuario.save();
+    const nuevoUsuario = new Usuario({
+      nombre,
+      email,
+      password: hashedPassword,
+    });
 
-    const token = jwt.sign(
-      { userId: usuarioGuardado._id, email: usuarioGuardado.email },
-      "clave-secreta",
-      { expiresIn: "1h" }
-    );
-
-    res.status(201).json({ usuario: usuarioGuardado, token });
-  } catch (err) {
-    return next(err);
+    try {
+      await nuevoUsuario.save();
+    } catch (error) {
+      const err = new Error("No se han podido guardar los datos");
+      err.code = 500;
+      return next(err);
+    }
+    // ? Código para la creación del token
+    try {
+      token = jwt.sign(
+        {
+          userId: nuevoUsuario.id,
+          email: nuevoUsuario.email,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+    } catch (error) {
+      const err = new Error("El proceso de alta ha fallado");
+      err.code = 500;
+      return next(err);
+    }
+    res.status(201).json({
+      userId: nuevoUsuario.id,
+      email: nuevoUsuario.email,
+      token: token,
+    });
   }
 });
 
+//*------------------LOGIN------------------*//
+
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
+  let usuarioExiste;
   try {
-    const existeUsuario = await Usuario.findOne({ email });
-    if (!existeUsuario) {
-      return res.status(401).json({
-        message: "No existe el usuario o la contraseña es incorrecta",
-      });
-    }
-    const passwordCorrecto = bcrypt.compareSync(
-      password,
-      existeUsuario.password
-    );
-    if (!passwordCorrecto) {
-      return res.status(401).json({
-        message: "No existe el usuario o la contraseña es incorrecta",
-      });
-    }
-    const token = jwt.sign(
-      { usuarioId: existeUsuario._id, email: existeUsuario.email },
-      "clave-secreta",
-      { expiresIn: "1h" }
-    );
-    res.status(200).json({ usuario: existeUsuario, token });
+    usuarioExiste = await Usuario.findOne({ email: email });
   } catch (err) {
-    return next(err);
+    const error = new Error("Error 1");
+    error.code = 500;
+    return next(error);
+  }
+  if (!usuarioExiste) {
+    const error = new Error("No existe ningún usuario con ese e-mail.");
+    error.code = 401;
+    return next(error);
+  } else {
+    let passwordValida = false;
+    try {
+      passwordValida = await bcrypt.compare(password, usuarioExiste.password);
+    } catch (err) {
+      const error = new Error("Error 2");
+      error.code = 500;
+      return next(error);
+    }
+    if (!passwordValida) {
+      const error = new Error("La contraseña no es válida.");
+      error.code = 401;
+      return next(error);
+    } else {
+      let token;
+      try {
+        token = jwt.sign(
+          {
+            userId: usuarioExiste.id,
+            email: usuarioExiste.email,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
+      } catch (err) {
+        const error = new Error("Error 3");
+        error.code = 500;
+        return next(error);
+      }
+      res.json({
+        userId: usuarioExiste.id,
+        email: usuarioExiste.email,
+        token: token,
+      });
+    }
   }
 });
 

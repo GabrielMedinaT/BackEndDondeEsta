@@ -11,8 +11,9 @@ const checkAuth = require("../middleware/checkAuth");
 const cors = require("cors");
 const autorizacion = require("../middleware/checkAuth");
 
-router.use(cors());
+// router.use(cors());
 
+router.use(checkAuth);
 //*VER CASAS
 
 router.get("/", async (req, res) => {
