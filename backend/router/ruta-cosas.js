@@ -31,38 +31,12 @@ router.post("/nuevo", async (req, res, next) => {
     habitacion,
     casa,
   } = req.body;
-  let existeCajon, existeArmario, existeHabitacion, existeCasa;
-  if (cajon) {
-    existeCajon = await Cajon.findOne({ nombre: cajon });
-    if (!existeCajon) {
-      res.json({ message: "El cajón no existe" });
-      return;
-    }
-    existeArmario = await Armario.findById(existeCajon.armario);
-    existeHabitacion = await Habitacion.findById(existeArmario.habitacion);
-    existeCasa = await Casa.findById(existeHabitacion.casa);
-  } else if (armario) {
-    existeArmario = await Armario.findOne({ nombre: armario });
-    if (!existeArmario) {
-      res.json({ message: "El armario no existe" });
-      return;
-    }
-    existeHabitacion = await Habitacion.findById(existeArmario.habitacion);
-    existeCasa = await Casa.findById(existeHabitacion.casa);
-  } else if (habitacion) {
-    existeHabitacion = await Habitacion.findOne({ nombre: habitacion });
-    if (!existeHabitacion) {
-      res.json({ message: "La habitación no existe" });
-      return;
-    }
-    existeCasa = await Casa.findById(existeHabitacion.casa);
-  } else if (casa) {
-    existeCasa = await Casa.findOne({ nombre: casa });
-    if (!existeCasa) {
-      res.json({ message: "La casa no existe" });
-      return;
-    }
-  }
+
+  let existeCajon = await Cajon.findOne({ nombre: cajon });
+  let existeArmario = await Armario.findOne({ nombre: armario });
+  let existeHabitacion = await Habitacion.findOne({ nombre: habitacion });
+  let existeCasa = await Casa.findOne({ nombre: casa });
+
   const cosa = new Cosa({
     nombre,
     descripcion,
@@ -70,10 +44,40 @@ router.post("/nuevo", async (req, res, next) => {
     cajon: existeCajon ? existeCajon._id : null,
     armario: existeArmario ? existeArmario._id : null,
     habitacion: existeHabitacion ? existeHabitacion._id : null,
-    casa: existeCasa ? existeCasa._id : null,
+    casa: existeCasa._id,
   });
+
   try {
     const cosaGuardada = await cosa.save();
+    if (existeCajon) {
+      const cosaCajon = await Cajon.findOneAndUpdate(
+        { nombre: cajon },
+        { $push: { cosas: cosa._id } },
+        { new: true }
+      );
+    }
+    if (existeArmario) {
+      const cosaArmario = await Armario.findOneAndUpdate(
+        { nombre: armario },
+        { $push: { cosas: cosa._id } },
+        { new: true }
+      );
+    }
+    if (existeHabitacion) {
+      const cosaHabitacion = await Habitacion.findOneAndUpdate(
+        { nombre: habitacion },
+        { $push: { cosas: cosa._id } },
+        { new: true }
+      );
+    }
+    if (existeCasa) {
+      const cosaCasa = await Casa.findOneAndUpdate(
+        { nombre: casa },
+        { $push: { cosas: cosaGuardada._id } },
+        { new: true }
+      );
+    }
+
     res.json(cosaGuardada);
   } catch (err) {
     res.json({ message: err });
@@ -182,7 +186,7 @@ router.patch("/editar/:nombre", async (req, res, next) => {
     });
     res.json({ message: "Cosa modificada" });
   } catch (err) {
-    res.json({ message: "error 2" });
+    res.json({ message: "error, no se pudo modificar " });
   }
 });
 
@@ -226,6 +230,16 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
   } catch (err) {
     res.json({ message: err });
   }
+});
+
+router.delete("/borrar/todo/todo", async (req, res, next) => {
+  await Cosa.deleteMany();
+  await Cajon.deleteMany();
+  await Armario.deleteMany();
+  await Habitacion.deleteMany();
+  await Casa.deleteMany();
+
+  res.json({ message: "Todo borrado" });
 });
 
 module.exports = router;

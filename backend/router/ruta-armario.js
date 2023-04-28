@@ -57,81 +57,68 @@ router.post("/nuevo", async (req, res, next) => {
 
 //*MODIFICAR ARMARIO
 router.patch("/editar/:nombre", async (req, res, next) => {
-  const { nombre } = req.params;
-  const { nuevoNombre, habitacion } = req.body;
-
-  let armario;
+  const { nombre, casa, habitacion } = req.body;
+  let existeArmario;
   try {
-    armario = await Armario.findOne({ nombre });
-    if (!armario) {
-      const error = new Error("No existe el armario");
-      error.statusCode = 404;
-      return next(error);
-    }
+    existeArmario = await Armario.findOne({ nombre: req.params.nombre });
   } catch (err) {
-    res.json({ message: err });
+    res.json({ message: "no se puede 1" });
     return next(err);
   }
-
-  // Busca la habitación antigua
-  let habitacionAntigua;
+  if (!existeArmario) {
+    res.json({ message: "No existe el armario" });
+    return next();
+  }
+  let existeHabitacion;
   try {
-    habitacionAntigua = await Habitacion.findById(armario.habitacion);
-    if (!habitacionAntigua) {
-      res.json({ message: "No existe la habitacion antigua" });
-      return next();
-    }
+    existeHabitacion = await Habitacion.findOne({ nombre: habitacion });
   } catch (err) {
-    res.json({ message: "No se puede buscar la habitacion antigua" });
+    res.json({ message: "no se puede 1" });
     return next(err);
   }
-
-  // Actualiza la habitación antigua y elimina el armario del array de armarios
-  try {
-    await Habitacion.findByIdAndUpdate(habitacionAntigua._id, {
-      $pull: { armarios: { nombre: armario._id } },
-    });
-  } catch (err) {
-    res.json({ message: "No se puede actualizar la habitacion antigua" });
-    return next(err);
+  if (!existeHabitacion) {
+    res.json({ message: "No existe la habitacion" });
+    return next();
   }
-
-  // Busca la nueva habitación
-  let habitacionNueva;
-  try {
-    habitacionNueva = await Habitacion.findOne({ habitacionNueva: habitacion });
-    console.log(habitacionNueva);
-    if (!habitacionNueva) {
-      res.json({ message: "No existe la habitacion nueva" });
-      return next();
-    }
-  } catch (err) {
-    res.json({ message: "No se puede buscar la habitacion nueva" });
-    return next(err);
+  let existeCasa = await Casa.findOne({ nombre: casa });
+  if (!existeCasa) {
+    res.json({ message: "No existe la casa" });
+    return next();
   }
+  let antiguaHabitacion = await Habitacion.findOne({
+    armarios: existeArmario._id,
+  });
 
-  // Actualiza la nueva habitación y agrega el armario al array de armarios
+  await Habitacion.findOneAndUpdate(
+    { _id: antiguaHabitacion._id },
+    { $pull: { armarios: existeArmario._id } },
+    { new: true }
+  );
+  antiguaHabitacion.armarios.pull(existeArmario._id);
+  await antiguaHabitacion.save();
+
+  await Habitacion.findOneAndUpdate(
+    { _id: existeHabitacion._id },
+    { $push: { armarios: existeArmario._id } },
+    { new: true }
+  );
+  existeHabitacion.armarios.push(existeArmario._id);
+  await existeHabitacion.save();
+
   try {
-    await Habitacion.findByIdAndUpdate(habitacionNueva._id, {
-      $push: { armarios: { nombre: armario._id } },
-    });
+    await Armario.findOneAndUpdate(
+      { _id: existeArmario._id },
+      {
+        nombre,
+        casa: existeCasa ? existeCasa._id : null,
+        habitacion: existeHabitacion._id,
+      },
+      { new: true }
+    );
+    res.json({ message: "Armario modificado" });
   } catch (err) {
-    res.json({ message: "No se puede actualizar la habitacion nueva" });
+    res.json({ message: "no se puede 2" });
     return next(err);
-  }
-
-  // Actualiza el nombre del armario si se proporcionó uno nuevo
-  if (nuevoNombre && nuevoNombre.trim() !== "") {
-    armario.nombre = nuevoNombre;
-    try {
-      const armarioGuardado = await armario.save();
-      res.json(armarioGuardado);
-    } catch (err) {
-      res.json({ message: "No se puede guardar el armario" });
-      return next(err);
-    }
-  } else {
-    res.json({ message: "Armario actualizado sin cambios" });
   }
 });
 
