@@ -22,7 +22,15 @@ router.get("/", async (req, res) => {
 //*CREAR COSAS
 
 router.post("/nuevo", async (req, res, next) => {
-  const { nombre, cajon, armario, habitacion, casa } = req.body;
+  const {
+    nombre,
+    descripcion,
+    clasificacion,
+    cajon,
+    armario,
+    habitacion,
+    casa,
+  } = req.body;
   let existeCajon, existeArmario, existeHabitacion, existeCasa;
   if (cajon) {
     existeCajon = await Cajon.findOne({ nombre: cajon });
