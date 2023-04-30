@@ -16,12 +16,16 @@ const autorizacion = require("../middleware/checkAuth");
 router.use(checkAuth);
 //*VER CASAS
 
-router.get("/", async (req, res) => {
+router.get("/", autorizacion, async (req, res, next) => {
+  const usuarioId = req.datosUsuario.userId;
+
   try {
-    const casas = await Casa.find().populate("habitaciones");
+    const casas = await Casa.find({ usuario: usuarioId }).populate(
+      "habitaciones"
+    );
     res.send(casas);
   } catch (err) {
-    res.json({ message: "No se puede obtener las casas" });
+    res.json({ message: "No se pueden obtener las casas" });
     return next(err);
   }
 });
@@ -37,21 +41,22 @@ router.get("/:nombre", async (req, res) => {
   }
 });
 
-// Ruta para crear una casa
+//*CREAR CASA
 router.post("/nueva", async (req, res, next) => {
+  const usuarioId = req.datosUsuario.userId;
   const { nombre, direccion, ciudad, habitaciones, cosas, usuario } = req.body;
-  let existeUsuario = await Usuario.findOne({ email: usuario });
-  if (!existeUsuario) {
-    res.json({ message: "No existe el usuario" });
-    return next();
-  }
+  // let existeUsuario = await Usuario.findOne({ email: usuario });
+  // if (!existeUsuario) {
+  //   res.json({ message: "No existe el usuario" });
+  //   return next();
+  // }
   const casa = new Casa({
     nombre,
     direccion,
     ciudad,
     habitaciones,
     cosas,
-    usuario: existeUsuario._id,
+    usuario: usuarioId,
   });
 
   try {
@@ -71,15 +76,22 @@ router.post("/nueva", async (req, res, next) => {
 
 // Ruta para modificar el nombre de una casa
 router.patch("/editar/:nombre", async (req, res, next) => {
+  const userId = req.datosUsuario.userId;
   const { nombre } = req.params;
   const { nuevoNombre } = req.body;
   try {
-    const casa = await Casa.findOneAndUpdate(
-      { nombre },
-      { nombre: nuevoNombre },
-      { new: true }
-    );
-    res.json(casa);
+    // Buscar la casa por su nombre y el ID del usuario que la creó
+    const casa = await Casa.findOne({ nombre, usuario: userId });
+    if (!casa) {
+      res.status(404).json({
+        message: "La casa no existe o no pertenece al usuario actual",
+      });
+      return next();
+    }
+    // Actualizar el nombre de la casa
+    casa.nombre = nuevoNombre;
+    const casaActualizada = await casa.save();
+    res.json(casaActualizada);
   } catch (err) {
     res.json({ message: "No se pudo modificar la casa" });
     return next(err);
@@ -87,15 +99,22 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 });
 
 // Ruta para borrar una casa
-router.delete("/borrar/:nombre", async (req, res, next) => {
+router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     await session.withTransaction(async () => {
       const casaBuscar = await Casa.findOne({
         nombre: req.params.nombre,
       }).session(session);
+
       if (!casaBuscar) {
         res.json({ message: "No existe la casa" });
+        return next();
+      }
+
+      // Validar que el usuario autenticado sea el mismo que creó la casa
+      if (casaBuscar.usuario.toString() !== req.datosUsuario.userId) {
+        res.status(404).json({ message: "La casa no existe" });
         return next();
       }
 
@@ -127,9 +146,16 @@ router.delete("/borrar/:nombre", async (req, res, next) => {
       await Casa.findOneAndDelete({ nombre: req.params.nombre }).session(
         session
       );
+
       let usuario = await Usuario.findOne({ casas: casaBuscar._id }).session(
         session
       );
+
+      if (!usuario) {
+        res.json({ message: "El usuario no existe" });
+        return next();
+      }
+
       usuario.casas.pull(casaBuscar._id);
 
       res.json({ message: "Casa borrada y cosas asignadas a la nueva caja" });

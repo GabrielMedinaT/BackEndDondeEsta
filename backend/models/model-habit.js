@@ -26,6 +26,10 @@ const habitacionSchema = new mongoose.Schema({
       ref: "Cosa",
     },
   ],
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+  },
 });
 
 module.exports = mongoose.model("Habitacion", habitacionSchema);

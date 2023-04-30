@@ -5,11 +5,18 @@ const Armarios = require("../models/model-armario");
 const Habitacion = require("../models/model-habit");
 const express = require("express");
 const router = express.Router();
+const autorizacion = require("../middleware/checkAuth");
+
+router.use(autorizacion);
 
 //*OBTENER HABITACIONES
 router.get("/", async (req, res, next) => {
+  const usuarioId = req.datosUsuario.userId;
+  console.log(usuarioId);
   try {
-    const habitaciones = await Habitacion.find().populate("armarios");
+    const habitaciones = await Habitacion.find({ usuario: usuarioId }).populate(
+      "casa"
+    );
     res.send(habitaciones);
   } catch (err) {
     return next(err);
@@ -18,30 +25,27 @@ router.get("/", async (req, res, next) => {
 
 //* HABITACIONES
 router.post("/nueva", async (req, res, next) => {
-  const { casa, nombre, armario } = req.body;
-  let existeCasa;
+  const usuarioId = req.datosUsuario.userId;
+  const { casa, nombre } = req.body;
+  const casabuscar = await Casa.findOne({ nombre: casa, usuario: usuarioId });
   try {
-    existeCasa = await Casa.findOne({ nombre: casa }).populate("habitaciones");
-  } catch (err) {
-    res.json({ message: err });
-    return next(err);
-  }
-  if (!existeCasa) {
-    res.json({ message: "No existe la casa" });
-    return next();
-  }
-  const habitacion = new Habitacion({
-    casa: existeCasa._id,
-    nombre,
-    armario,
-  });
-  try {
+    if (!casabuscar) {
+      res.status(404).json({
+        message: "La casa no existe o no tiene permisos para modificarla",
+      });
+      return;
+    }
+    const habitacion = new Habitacion({
+      casa: casabuscar._id,
+      nombre,
+      usuario: usuarioId,
+    });
     await habitacion.save();
-    existeCasa.habitaciones.push(habitacion);
-    await existeCasa.save();
-    res.json({ habitacion, casa: existeCasa });
+    casabuscar.habitaciones.push(habitacion);
+    await casabuscar.save();
+    res.json({ habitacion, casa: casabuscar });
   } catch (err) {
-    res.json({ message: err });
+    res.status(500).json({ message: "Error interno del servidor" });
     return next(err);
   }
 });
@@ -51,6 +55,7 @@ router.post("/nueva", async (req, res, next) => {
 router.patch("/editar/:nombre", async (req, res, next) => {
   const { nombre } = req.params;
   const { nuevoNombre } = req.body;
+  const usuarioId = req.datosUsuario.userId;
   if (!nuevoNombre || nuevoNombre.trim() === "") {
     const error = new Error("El nuevo nombre no puede estar vacío");
     error.statusCode = 422;
@@ -58,7 +63,10 @@ router.patch("/editar/:nombre", async (req, res, next) => {
   }
   let existeHabitacion;
   try {
-    existeHabitacion = await Habitacion.findOne({ nombre: nombre });
+    existeHabitacion = await Habitacion.findOne(
+      { nombre: nombre },
+      { usuario: usuarioId }
+    );
   } catch (err) {
     const error = new Error("No se pudo encontrar la habitación");
     error.statusCode = 500;
@@ -85,7 +93,11 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 
 //*ELIMINAR HABITACIÓN
 router.delete("/borrar/:nombre", async (req, res, next) => {
-  existeHabitacion = await Habitacion.findOne({ nombre: req.params.nombre });
+  const usuarioId = req.datosUsuario.userId;
+  existeHabitacion = await Habitacion.findOne(
+    { nombre: req.params.nombre },
+    { usuario: usuarioId }
+  );
   if (!existeHabitacion) {
     res.json({ message: "No existe la habitación" });
     return next();

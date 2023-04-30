@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/checkAuth").default;
 const router = express.Router();
 const cors = require("cors");
+require("dotenv").config();
 
 router.use(cors());
 
@@ -31,7 +32,7 @@ router.post("/registro", async (req, res, next) => {
     return next(error);
   }
   if (existeUsuario) {
-    const error = new Error("Ya existe un docente con ese e-mail.");
+    const error = new Error("Ya existe un usuario con ese e-mail.");
     error.code = 401;
     return next(error);
   } else {
@@ -40,26 +41,23 @@ router.post("/registro", async (req, res, next) => {
       hashedPassword = await bcrypt.hash(password, 12); // ? Método que produce la encriptación
     } catch (error) {
       const err = new Error(
-        "No se ha podido crear el docente. Inténtelo de nuevo"
+        "No se ha podido crear usuario. Inténtelo de nuevo"
       );
       err.code = 500;
       return next(err);
     }
-
     const nuevoUsuario = new Usuario({
       nombre,
       email,
       password: hashedPassword,
     });
-
     try {
       await nuevoUsuario.save();
     } catch (error) {
       const err = new Error("No se han podido guardar los datos");
       err.code = 500;
-      return next(err);
+      return next();
     }
-    // ? Código para la creación del token
     try {
       token = jwt.sign(
         {
@@ -72,10 +70,17 @@ router.post("/registro", async (req, res, next) => {
         }
       );
     } catch (error) {
-      const err = new Error("El proceso de alta ha fallado");
+      const err = new Error("No se ha podido crear el token");
       err.code = 500;
       return next(err);
     }
+
+    if (!token) {
+      const error = new Error("No se ha podido crear el token");
+      error.code = 500;
+      return next(error);
+    }
+
     res.status(201).json({
       userId: nuevoUsuario.id,
       email: nuevoUsuario.email,
@@ -123,7 +128,7 @@ router.post("/login", async (req, res, next) => {
           },
           process.env.JWT_SECRET,
           {
-            expiresIn: "1h",
+            expiresIn: "10h",
           }
         );
       } catch (err) {
@@ -139,7 +144,7 @@ router.post("/login", async (req, res, next) => {
     }
   }
 });
-
+//*-----------------ELIMINAR USUARIO------------------*//
 router.delete("/borrar/:email", async (req, res, next) => {
   try {
     const usuario = await Usuario.findOneAndDelete({ email: req.params.email });
