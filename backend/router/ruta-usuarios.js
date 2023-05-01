@@ -98,7 +98,7 @@ router.post("/login", async (req, res, next) => {
     usuarioExiste = await Usuario.findOne({ email: email });
   } catch (err) {
     const error = new Error("Error 1");
-    error.code = 500;
+    error.code = 401;
     return next(error);
   }
   if (!usuarioExiste) {
@@ -111,7 +111,7 @@ router.post("/login", async (req, res, next) => {
       passwordValida = await bcrypt.compare(password, usuarioExiste.password);
     } catch (err) {
       const error = new Error("Error 2");
-      error.code = 500;
+      error.code = 401;
       return next(error);
     }
     if (!passwordValida) {
@@ -133,7 +133,7 @@ router.post("/login", async (req, res, next) => {
         );
       } catch (err) {
         const error = new Error("Error 3");
-        error.code = 500;
+        error.code = 401;
         return next(error);
       }
       res.json({
