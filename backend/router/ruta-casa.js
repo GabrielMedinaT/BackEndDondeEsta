@@ -143,7 +143,7 @@ router.delete("/borrar/:id", autorizacion, async (req, res, next) => {
 
       await Casa.findByIdAndDelete(req.params.id).session(session);
 
-      let usuario = await Usuario.findOne({ casas: casaBuscar._id }).session(
+      let usuario = await Usuario.findById({ casas: casaBuscar._id }).session(
         session
       );
 
