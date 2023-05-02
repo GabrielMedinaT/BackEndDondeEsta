@@ -99,13 +99,11 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 });
 
 // Ruta para borrar una casa
-router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
+router.delete("/borrar/:id", autorizacion, async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     await session.withTransaction(async () => {
-      const casaBuscar = await Casa.findOne({
-        nombre: req.params.nombre,
-      }).session(session);
+      const casaBuscar = await Casa.findById(req.params.id).session(session);
 
       if (!casaBuscar) {
         res.json({ message: "No existe la casa" });
@@ -143,9 +141,7 @@ router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
       // Guardar la nueva caja en la base de datos
       const cajaGuardada = await nuevaCaja.save();
 
-      await Casa.findOneAndDelete({ nombre: req.params.nombre }).session(
-        session
-      );
+      await Casa.findByIdAndDelete(req.params.id).session(session);
 
       let usuario = await Usuario.findOne({ casas: casaBuscar._id }).session(
         session
