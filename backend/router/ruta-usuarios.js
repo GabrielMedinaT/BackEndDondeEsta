@@ -9,6 +9,15 @@ require("dotenv").config();
 
 router.use(cors());
 
+router.get("/", async (req, res, next) => {
+  try {
+    const usuarios = await Usuario.find().populate("casas");
+    res.json({ usuarios });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 // * Crear nuevo usuario
 router.post("/registro", async (req, res, next) => {
   const { nombre, email, password } = req.body;
@@ -54,6 +63,7 @@ router.post("/registro", async (req, res, next) => {
         {
           userId: nuevoUsuario.id,
           email: nuevoUsuario.email,
+          nombre: nuevoUsuario.nombre,
         },
         process.env.JWT_SECRET,
         {
