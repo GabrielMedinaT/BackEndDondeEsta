@@ -8,7 +8,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 router.use(cors());
-
+router.use(checkAuth);
 router.get("/", async (req, res, next) => {
   try {
     const usuarios = await Usuario.find().populate("casas");
