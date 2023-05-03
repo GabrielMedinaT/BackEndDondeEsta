@@ -2,21 +2,12 @@ const express = require("express");
 const Usuario = require("../models/model-usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const checkAuth = require("../middleware/checkAuth").default;
+const checkAuth = require("../middleware/checkAuth");
 const router = express.Router();
 const cors = require("cors");
 require("dotenv").config();
 
 router.use(cors());
-router.use(checkAuth);
-router.get("/", async (req, res, next) => {
-  try {
-    const usuarios = await Usuario.find().populate("casas");
-    res.json({ usuarios });
-  } catch (err) {
-    return next(err);
-  }
-});
 
 // * Crear nuevo usuario
 router.post("/registro", async (req, res, next) => {
@@ -144,6 +135,8 @@ router.post("/login", async (req, res, next) => {
     }
   }
 });
+router.use(checkAuth);
+
 //*-----------------ELIMINAR USUARIO------------------*//
 router.delete("/borrar/:email", async (req, res, next) => {
   try {
@@ -152,6 +145,15 @@ router.delete("/borrar/:email", async (req, res, next) => {
       return res.status(404).json({ message: "No existe el usuario" });
     }
     res.json({ message: "Usuario borrado" });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get("/", async (req, res, next) => {
+  try {
+    const usuarios = await Usuario.find().populate("casas");
+    res.json({ usuarios });
   } catch (err) {
     return next(err);
   }
