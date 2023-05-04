@@ -4,10 +4,13 @@ const Cajon = require("../models/model-cajon");
 const Cosas = require("../models/model-cosas");
 const Habitacion = require("../models/model-habit");
 const Casa = require("../models/model-casa");
+const checkAuth = require("../middleware/checkAuth");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.use(checkAuth);
+
+router.get("/", checkAuth, async (req, res) => {
   try {
     const cajones = await Cajon.find().populate("cosas");
     res.send(cajones);
@@ -16,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/nuevo", async (req, res, next) => {
+router.post("/nuevo", checkAuth, async (req, res, next) => {
   const { nombre, armario, cosas } = req.body;
   let existeArmario;
   try {
@@ -48,7 +51,7 @@ router.post("/nuevo", async (req, res, next) => {
 });
 
 //*MODIFICAR CAJON
-router.patch("/editar/:nombre", async (req, res, next) => {
+router.patch("/editar/:nombre", checkAuth, async (req, res, next) => {
   const { nuevoNombre } = req.body;
   const { nombre } = req.params;
   let existeCajon;
@@ -76,7 +79,7 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 });
 
 //*ELIMINAR CAJON
-router.delete("/eliminar/:nombre", async (req, res, next) => {
+router.delete("/eliminar/:nombre", checkAuth, async (req, res, next) => {
   const { nombre } = req.params;
   let existeCajon;
   try {

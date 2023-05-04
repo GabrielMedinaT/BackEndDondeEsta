@@ -5,8 +5,10 @@ const Armario = require("../models/model-armario");
 const Cajon = require("../models/model-cajon");
 const Casa = require("../models/model-casa");
 const router = express.Router();
+const checkAuth = require("../middleware/checkAuth");
 
-router.get("/", async (req, res) => {
+router.use(checkAuth);
+router.get("/", checkAuth, async (req, res) => {
   try {
     const armarios = await Armario.find().populate("habitacion");
     res.send(armarios);
@@ -15,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/nuevo", async (req, res, next) => {
+router.post("/nuevo", checkAuth, async (req, res, next) => {
   const { nombre, casa, habitacion, cajon } = req.body;
   let existeHabitacion;
   try {
@@ -56,7 +58,7 @@ router.post("/nuevo", async (req, res, next) => {
 });
 
 //*MODIFICAR ARMARIO
-router.patch("/editar/:nombre", async (req, res, next) => {
+router.patch("/editar/:nombre", checkAuth, async (req, res, next) => {
   const { nombre, casa, habitacion } = req.body;
   let existeArmario;
   try {
@@ -123,7 +125,7 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 });
 
 //*BORRAR ARMARIO
-router.delete("/borrar/:nombre", async (req, res, next) => {
+router.delete("/borrar/:nombre", checkAuth, async (req, res, next) => {
   exiteArmario = await Armario.findOne({ nombre: req.params.nombre });
   if (!exiteArmario) {
     res.json({ message: "No existe el armario" });

@@ -10,7 +10,7 @@ const autorizacion = require("../middleware/checkAuth");
 router.use(autorizacion);
 
 //*OBTENER HABITACIONES
-router.get("/", async (req, res, next) => {
+router.get("/", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
   console.log(usuarioId);
   try {
@@ -24,7 +24,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //* HABITACIONES
-router.post("/nueva", async (req, res, next) => {
+router.post("/nueva", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
   const { casa, nombre } = req.body;
   const casabuscar = await Casa.findOne({ nombre: casa, usuario: usuarioId });
@@ -52,7 +52,7 @@ router.post("/nueva", async (req, res, next) => {
 
 //*EDITAR HABITACIÓN
 
-router.patch("/editar/:nombre", async (req, res, next) => {
+router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const { nombre } = req.params;
   const { nuevoNombre } = req.body;
   const usuarioId = req.datosUsuario.userId;
@@ -92,7 +92,7 @@ router.patch("/editar/:nombre", async (req, res, next) => {
 });
 
 //*ELIMINAR HABITACIÓN
-router.delete("/borrar/:nombre", async (req, res, next) => {
+router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
   existeHabitacion = await Habitacion.findOne(
     { nombre: req.params.nombre },
