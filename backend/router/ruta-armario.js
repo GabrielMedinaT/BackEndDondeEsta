@@ -9,8 +9,9 @@ const checkAuth = require("../middleware/checkAuth");
 
 router.use(checkAuth);
 router.get("/", checkAuth, async (req, res) => {
+  const usuarioId = req.datosUsuario.userId;
   try {
-    const armarios = await Armario.find().populate("habitacion");
+    const armarios = await Armario.find({ usuario: usuarioId });
     res.send(armarios);
   } catch (err) {
     res.json({ message: err });
@@ -19,6 +20,7 @@ router.get("/", checkAuth, async (req, res) => {
 
 router.post("/nuevo", checkAuth, async (req, res, next) => {
   const { nombre, casa, habitacion, cajon } = req.body;
+  const usuarioId = req.datosUsuario.userId;
   let existeHabitacion;
   try {
     existeHabitacion = await Habitacion.findOne({ nombre: habitacion });
@@ -40,6 +42,7 @@ router.post("/nuevo", checkAuth, async (req, res, next) => {
     casa: existeCasa._id,
     habitacion: existeHabitacion._id,
     cajon,
+    usuario: usuarioId,
   });
   try {
     await Habitacion.findOneAndUpdate(

@@ -31,6 +31,10 @@ const armarioSchema = new mongoose.Schema({
       ref: "Cosa",
     },
   ],
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+  },
 });
 
 module.exports = mongoose.model("Armarios", armarioSchema);
