@@ -16,8 +16,9 @@ router.use(checkAuth);
 //*VER COSAS
 
 router.get("/", autorizacion, async (req, res) => {
+  const usuarioId = req.datosUsuario.userId;
   try {
-    const cosas = await Cosa.find().populate("cajon");
+    const cosas = await Cosa.find({ usuario: usuarioId }).populate("cajon");
     res.send(cosas);
   } catch (err) {
     res.json({ message: err });
@@ -37,6 +38,7 @@ router.get("/clase/:clase", autorizacion, async (req, res) => {
 //*CREAR COSAS
 
 router.post("/nuevo", autorizacion, async (req, res, next) => {
+  const usuarioId = req.datosUsuario.userId;
   const {
     nombre,
     descripcion,
@@ -60,6 +62,7 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
     armario: existeArmario ? existeArmario._id : null,
     habitacion: existeHabitacion ? existeHabitacion._id : null,
     casa: existeCasa._id,
+    usuario: usuarioId,
   });
 
   try {

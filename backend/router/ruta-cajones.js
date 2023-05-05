@@ -5,21 +5,25 @@ const Cosas = require("../models/model-cosas");
 const Habitacion = require("../models/model-habit");
 const Casa = require("../models/model-casa");
 const checkAuth = require("../middleware/checkAuth");
-
+const autorizacion = require("../middleware/checkAuth");
 const router = express.Router();
+const cors = require("cors");
+router.use(cors());
 
 router.use(checkAuth);
 
-router.get("/", checkAuth, async (req, res) => {
+router.get("/", autorizacion, async (req, res) => {
+  const usuarioId = req.datosUsuario.userId;
   try {
-    const cajones = await Cajon.find().populate("cosas");
+    const cajones = await Cajon.find({ usuario: usuarioId }).populate("cosas");
     res.send(cajones);
   } catch (err) {
     res.json({ message: err });
   }
 });
 
-router.post("/nuevo", checkAuth, async (req, res, next) => {
+router.post("/nuevo", autorizacion, async (req, res, next) => {
+  const usuarioId = req.datosUsuario.userId;
   const { nombre, armario, cosas } = req.body;
   let existeArmario;
   try {
@@ -34,7 +38,9 @@ router.post("/nuevo", checkAuth, async (req, res, next) => {
   const cajon = new Cajon({
     nombre,
     armario: existeArmario._id,
+    usuario: usuarioId,
   });
+
   try {
     await Armarios.findOneAndUpdate(
       { _id: existeArmario },
