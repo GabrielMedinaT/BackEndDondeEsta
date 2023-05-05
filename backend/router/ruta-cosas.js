@@ -9,12 +9,13 @@ const Caja = require("../models/model-cajas");
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middleware/checkAuth");
+const autorizacion = require("../middleware/checkAuth");
 
 router.use(checkAuth);
 
 //*VER COSAS
 
-router.get("/", checkAuth, async (req, res) => {
+router.get("/", autorizacion, async (req, res) => {
   try {
     const cosas = await Cosa.find().populate("cajon");
     res.send(cosas);
@@ -23,7 +24,7 @@ router.get("/", checkAuth, async (req, res) => {
   }
 });
 
-router.get("/clase/:clase", async (req, res) => {
+router.get("/clase/:clase", autorizacion, async (req, res) => {
   const { clase } = req.params;
   try {
     const cosas = await Cosa.find({ clasificacion: clase });
@@ -35,7 +36,7 @@ router.get("/clase/:clase", async (req, res) => {
 
 //*CREAR COSAS
 
-router.post("/nuevo", checkAuth, async (req, res, next) => {
+router.post("/nuevo", autorizacion, async (req, res, next) => {
   const {
     nombre,
     descripcion,
@@ -100,7 +101,7 @@ router.post("/nuevo", checkAuth, async (req, res, next) => {
 
 //*MODIFICAR COSA
 
-router.patch("/editar/:nombre", checkAuth, async (req, res, next) => {
+router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const { nombre } = req.params;
   const { cajon, armario, habitacion, casa } = req.body;
   let existeCosa = await Cosa.findOne({ nombre: nombre });
@@ -206,7 +207,7 @@ router.patch("/editar/:nombre", checkAuth, async (req, res, next) => {
 
 //*BORRAR COSA
 
-router.delete("/borrar/:nombre", checkAuth, async (req, res, next) => {
+router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
   const { nombre } = req.params;
   let existeCosa = await Cosa.findOne({ nombre: nombre });
   let existeCajon = await Cajon.findById(existeCosa.cajon);

@@ -6,9 +6,12 @@ const Cajon = require("../models/model-cajon");
 const Casa = require("../models/model-casa");
 const router = express.Router();
 const checkAuth = require("../middleware/checkAuth");
-
+const autorizacion = require("../middleware/checkAuth");
+const cors = require("cors");
+router.use(cors());
 router.use(checkAuth);
-router.get("/", checkAuth, async (req, res) => {
+
+router.get("/", autorizacion, async (req, res) => {
   const usuarioId = req.datosUsuario.userId;
   try {
     const armarios = await Armario.find({ usuario: usuarioId });
@@ -18,9 +21,11 @@ router.get("/", checkAuth, async (req, res) => {
   }
 });
 
-router.post("/nuevo", checkAuth, async (req, res, next) => {
-  const { nombre, casa, habitacion, cajon } = req.body;
+router.post("/nuevo", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
+
+  const { nombre, casa, habitacion, cajon } = req.body;
+
   let existeHabitacion;
   try {
     existeHabitacion = await Habitacion.findOne({ nombre: habitacion });

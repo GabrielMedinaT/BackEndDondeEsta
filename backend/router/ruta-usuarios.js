@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/checkAuth");
 const router = express.Router();
 const cors = require("cors");
+const autorizacion = require("../middleware/checkAuth");
 require("dotenv").config();
 
 router.use(cors());
@@ -148,7 +149,7 @@ router.post("/login", async (req, res, next) => {
 router.use(checkAuth);
 
 //*-----------------ELIMINAR USUARIO------------------*//
-router.delete("/borrar/:email", async (req, res, next) => {
+router.delete("/borrar/:email", autorizacion, async (req, res, next) => {
   try {
     const usuario = await Usuario.findOneAndDelete({ email: req.params.email });
     if (!usuario) {
