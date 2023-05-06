@@ -24,7 +24,7 @@ router.get("/", autorizacion, async (req, res) => {
 router.post("/nuevo", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
 
-  const { nombre, casa, habitacion, cajon } = req.body;
+  const { nombre, casa, habitacion, nombreHabitacion, cajon } = req.body;
 
   let existeHabitacion;
   try {
