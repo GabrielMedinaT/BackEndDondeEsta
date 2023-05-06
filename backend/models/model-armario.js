@@ -13,6 +13,12 @@ const armarioSchema = new mongoose.Schema({
     ref: "Habitacion",
     required: true,
   },
+  nombreHabitacion: {
+    type: String,
+    required: true,
+    minLenght: 3,
+    maxLenght: 20,
+  },
   casa: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Casa",

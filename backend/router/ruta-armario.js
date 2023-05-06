@@ -46,6 +46,7 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
     nombre,
     casa: existeCasa._id,
     habitacion: existeHabitacion._id,
+    nombreHabitacion: existeHabitacion.nombre,
     cajon,
     usuario: usuarioId,
   });
