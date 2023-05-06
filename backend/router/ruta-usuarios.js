@@ -10,15 +10,6 @@ require("dotenv").config();
 
 router.use(cors());
 
-router.get("/", async (req, res, next) => {
-  try {
-    const usuarios = await Usuario.find().populate("casas");
-    res.json({ usuarios });
-  } catch (err) {
-    return next(err);
-  }
-});
-
 // * Crear nuevo usuario
 router.post("/registro", async (req, res, next) => {
   const { nombre, email, password } = req.body;
@@ -146,7 +137,69 @@ router.post("/login", async (req, res, next) => {
     }
   }
 });
-router.use(checkAuth);
+
+//*MODIFICAR CONTRASEÑA
+
+router.patch("/password", async (req, res, next) => {
+  const { email, password } = req.body;
+
+  let usuario;
+  try {
+    usuario = await Usuario.findOne({ email: email });
+  } catch (err) {
+    const error = new Error("Error al buscar el usuario");
+    error.code = 500;
+    return next(error);
+  }
+
+  if (!usuario) {
+    const error = new Error("No se encontró el usuario");
+    error.code = 404;
+    return next(error);
+  }
+
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (error) {
+    const err = new Error("No se ha podido encriptar la contraseña");
+    err.code = 500;
+    return next(err);
+  }
+
+  usuario.password = hashedPassword;
+
+  try {
+    await usuario.save();
+  } catch (error) {
+    const err = new Error("No se ha podido guardar la contraseña");
+    err.code = 500;
+    return next(err);
+  }
+
+  res.status(200).json({
+    message: "Contraseña modificada exitosamente",
+  });
+});
+
+router.get("/", async (req, res, next) => {
+  try {
+    const usuarios = await Usuario.find().populate("casas");
+    res.json({ usuarios });
+  } catch (err) {
+    return next(err);
+  }
+});
+// router.use(checkAuth);
+//*VER USUARIOS
+router.get("/", async (req, res, next) => {
+  try {
+    const usuarios = await Usuario.find().populate("casas");
+    res.json({ usuarios });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 //*-----------------ELIMINAR USUARIO------------------*//
 router.delete("/borrar/:email", autorizacion, async (req, res, next) => {
@@ -156,15 +209,6 @@ router.delete("/borrar/:email", autorizacion, async (req, res, next) => {
       return res.status(404).json({ message: "No existe el usuario" });
     }
     res.json({ message: "Usuario borrado" });
-  } catch (err) {
-    return next(err);
-  }
-});
-
-router.get("/", async (req, res, next) => {
-  try {
-    const usuarios = await Usuario.find().populate("casas");
-    res.json({ usuarios });
   } catch (err) {
     return next(err);
   }
