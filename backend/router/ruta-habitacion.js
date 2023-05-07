@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Cajon = require("../models/model-cajon");
 const Casa = require("../models/model-casa");
+const Cosa = require("../models/model-cosas");
 const Armarios = require("../models/model-armario");
 const Habitacion = require("../models/model-habit");
 const Caja = require("../models/model-cajas");
@@ -129,13 +130,12 @@ router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
     // Eliminar la habitación de la colección
     await Habitacion.findOneAndDelete({ nombre: nombreHabitacion });
 
-    // Eliminar los armarios asociados a la habitación
-    await Armarios.deleteMany({ habitacion: habitacion._id });
-
     // Obtener los IDs de los armarios eliminados
     const armariosEliminados = habitacion.armarios.map(
       (armario) => armario._id
     );
+    //eliminar los armarios asociados a la habitacion
+    await Armarios.deleteMany({ _id: { $in: armariosEliminados } });
 
     // Eliminar los cajones asociados a los armarios eliminados y guardar las cosas en una caja
     const caja = new Caja({
@@ -143,13 +143,31 @@ router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
       cosas: [],
     });
 
-    // Buscar y eliminar los cajones asociados a los armarios eliminados
+    await Cajon.deleteMany({ armario: { $in: armariosEliminados } });
+
+    // Obtener los IDs de los cajones eliminados
     const cajonesEliminados = await Cajon.find({
       armario: { $in: armariosEliminados },
+    }).distinct("_id");
+
+    // Encontrar las cosas relacionadas con los armarios y cajones eliminados
+    const cosasRelacionadas = await Cosa.find({
+      $or: [
+        { habitacion: habitacion._id },
+        { armario: { $in: armariosEliminados } },
+        { cajon: { $in: cajonesEliminados } },
+      ],
     });
-    const cosas = cajonesEliminados.map((cajon) => cajon.cosas);
-    caja.cosas = cosas;
-    await Cajon.deleteMany({ armario: { $in: armariosEliminados } });
+
+    // Actualizar las referencias y añadir la referencia a la nueva caja
+    for (const cosa of cosasRelacionadas) {
+      cosa.habitacion = undefined;
+      cosa.armario = undefined;
+      cosa.cajon = undefined;
+      cosa.caja = caja._id;
+      await cosa.save();
+    }
+
     await caja.save();
 
     res.json({
