@@ -3,6 +3,7 @@ const Cajon = require("../models/model-cajon");
 const Casa = require("../models/model-casa");
 const Armarios = require("../models/model-armario");
 const Habitacion = require("../models/model-habit");
+const Caja = require("../models/model-cajas");
 const express = require("express");
 const router = express.Router();
 const autorizacion = require("../middleware/checkAuth");
@@ -128,7 +129,33 @@ router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
     // Eliminar la habitación de la colección
     await Habitacion.findOneAndDelete({ nombre: nombreHabitacion });
 
-    res.json({ message: "Habitación eliminada y eliminada de la casa" });
+    // Eliminar los armarios asociados a la habitación
+    await Armarios.deleteMany({ habitacion: habitacion._id });
+
+    // Obtener los IDs de los armarios eliminados
+    const armariosEliminados = habitacion.armarios.map(
+      (armario) => armario._id
+    );
+
+    // Eliminar los cajones asociados a los armarios eliminados y guardar las cosas en una caja
+    const caja = new Caja({
+      nombre: "Caja de cosas de la habitación eliminada",
+      cosas: [],
+    });
+
+    // Buscar y eliminar los cajones asociados a los armarios eliminados
+    const cajonesEliminados = await Cajon.find({
+      armario: { $in: armariosEliminados },
+    });
+    const cosas = cajonesEliminados.map((cajon) => cajon.cosas);
+    caja.cosas = cosas;
+    await Cajon.deleteMany({ armario: { $in: armariosEliminados } });
+    await caja.save();
+
+    res.json({
+      message:
+        "Habitación eliminada, junto con los armarios y cajones asociados. Las cosas se guardaron en una caja.",
+    });
   } catch (err) {
     res.json({ message: err });
     return next(err);
