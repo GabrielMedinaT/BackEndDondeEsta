@@ -14,7 +14,7 @@ const autorizacion = require("../middleware/checkAuth");
 router.use(checkAuth);
 
 //*VER COSAS
-
+router.use(cors());
 router.get("/", autorizacion, async (req, res) => {
   const usuarioId = req.datosUsuario.userId;
   try {
