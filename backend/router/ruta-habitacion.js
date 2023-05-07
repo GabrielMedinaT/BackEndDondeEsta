@@ -15,7 +15,7 @@ router.get("/", autorizacion, async (req, res, next) => {
   console.log(usuarioId);
   try {
     const habitaciones = await Habitacion.find({ usuario: usuarioId }).populate(
-      "casa"
+      "armarios"
     );
     res.send(habitaciones);
   } catch (err) {
@@ -92,20 +92,43 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
 });
 
 //*ELIMINAR HABITACIÓN
+
 router.delete("/borrar/:nombre", autorizacion, async (req, res, next) => {
+  const nombreHabitacion = req.params.nombre;
   const usuarioId = req.datosUsuario.userId;
-  existeHabitacion = await Habitacion.findOne(
-    { nombre: req.params.nombre },
-    { usuario: usuarioId }
-  );
-  if (!existeHabitacion) {
-    res.json({ message: "No existe la habitación" });
-    return next();
-  }
 
   try {
-    await Habitacion.findOneAndDelete({ nombre: req.params.nombre });
-    res.json({ message: "Habitación eliminada" });
+    // Buscar la habitación a eliminar
+    const habitacion = await Habitacion.findOne({
+      nombre: nombreHabitacion,
+      usuario: usuarioId,
+    });
+    if (!habitacion) {
+      res.json({ message: "No se encontró la habitación" });
+      return next();
+    }
+
+    // Buscar la casa que contiene la habitación
+    const casa = await Casa.findOne({
+      habitaciones: { $in: [habitacion._id] },
+    });
+    if (!casa) {
+      res.json({
+        message: "No se encontró la casa que contiene la habitación",
+      });
+      return next();
+    }
+
+    // Eliminar el ID de la habitación del array de habitaciones de la casa
+    casa.habitaciones = casa.habitaciones.filter(
+      (hab) => hab.toString() !== habitacion._id.toString()
+    );
+    await casa.save();
+
+    // Eliminar la habitación de la colección
+    await Habitacion.findOneAndDelete({ nombre: nombreHabitacion });
+
+    res.json({ message: "Habitación eliminada y eliminada de la casa" });
   } catch (err) {
     res.json({ message: err });
     return next(err);

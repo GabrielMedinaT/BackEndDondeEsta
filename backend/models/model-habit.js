@@ -20,6 +20,9 @@ const habitacionSchema = new mongoose.Schema({
       ref: "Armarios",
     },
   ],
+  nombreArmarios: {
+    type: String,
+  },
   cosas: [
     {
       type: mongoose.Schema.Types.ObjectId,

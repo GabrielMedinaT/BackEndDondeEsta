@@ -113,6 +113,14 @@ router.delete("/eliminar/:nombre", checkAuth, async (req, res, next) => {
     return res.json("No existe el cajon  ");
   }
   try {
+    const armarioId = existeCajon.armario;
+
+    // Eliminar el cajón del array cajon de la colección Armarios
+    await Armarios.updateOne(
+      { _id: armarioId },
+      { $pull: { cajon: existeCajon._id } }
+    );
+
     const nuevaCaja = new Caja({
       nombre: `${existeCajon.armario.nombre}-${existeCajon.nombre}`,
       cosas: Cosas,

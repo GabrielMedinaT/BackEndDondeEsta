@@ -134,17 +134,29 @@ router.patch("/editar/:nombre", checkAuth, async (req, res, next) => {
 });
 
 //*BORRAR ARMARIO
+
 router.delete("/borrar/:nombre", checkAuth, async (req, res, next) => {
-  exiteArmario = await Armario.findOne({ nombre: req.params.nombre });
-  if (!exiteArmario) {
-    res.json({ message: "No existe el armario" });
-    return next();
-  }
+  const nombreArmario = req.params.nombre;
   try {
-    await Armario.findOneAndDelete({ nombre: req.params.nombre });
-    res.json({ message: "Armario borrado" });
+    // Buscar el armario a eliminar
+    const armario = await Armario.findOne({ nombre: nombreArmario });
+    if (!armario) {
+      res.json({ message: "No se encontró el armario" });
+      return next();
+    }
+
+    // Eliminar el ID del armario del array de armarios de la habitación
+    await Habitacion.updateMany(
+      { armarios: armario._id },
+      { $pull: { armarios: armario._id } }
+    );
+
+    // Eliminar el armario de la colección de armarios
+    await Armario.findOneAndDelete({ nombre: nombreArmario });
+
+    res.json({ message: "Armario borrado y eliminado de la habitación" });
   } catch (err) {
-    res.json({ message: "No se puede borrar el armario" });
+    res.json({ message: "No se pudo borrar el armario" });
     return next(err);
   }
 });
