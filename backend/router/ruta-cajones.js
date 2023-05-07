@@ -7,7 +7,9 @@ const Casa = require("../models/model-casa");
 const checkAuth = require("../middleware/checkAuth");
 const autorizacion = require("../middleware/checkAuth");
 const router = express.Router();
+const Caja = require("../models/model-cajas");
 const cors = require("cors");
+
 router.use(cors());
 
 router.use(checkAuth);
