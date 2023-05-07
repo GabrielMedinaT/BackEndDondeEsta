@@ -14,7 +14,7 @@ router.use(autorizacion);
 //*OBTENER HABITACIONES
 router.get("/", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
-  console.log(usuarioId);
+
   try {
     const habitaciones = await Habitacion.find({ usuario: usuarioId }).populate(
       "armarios"
