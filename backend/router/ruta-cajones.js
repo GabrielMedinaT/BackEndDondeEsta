@@ -24,7 +24,7 @@ router.get("/", autorizacion, async (req, res) => {
 
 router.post("/nuevo", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
-  const { nombre, armario, cosas } = req.body;
+  const { nombre, armario, habitacion, cosas } = req.body;
   let existeArmario;
   try {
     existeArmario = await Armarios.findOne({ nombre: armario });
@@ -35,9 +35,22 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
   if (!existeArmario) {
     return res.json("No existe el armario  ");
   }
+  let existeHabitacion;
+  try {
+    existeHabitacion = await Habitacion.findOne({ nombre: habitacion });
+  } catch (err) {
+    res.json({ message: err });
+    return next(err);
+  }
+  if (!existeHabitacion) {
+    return res.json("No existe la habitacion  ");
+  }
   const cajon = new Cajon({
     nombre,
+    habitacion: existeHabitacion._id,
+    nombreHabitacion: existeHabitacion.nombre,
     armario: existeArmario._id,
+    nombreArmario: existeArmario.nombre,
     usuario: usuarioId,
   });
 
