@@ -8,6 +8,7 @@ const router = express.Router();
 const checkAuth = require("../middleware/checkAuth");
 const autorizacion = require("../middleware/checkAuth");
 const cors = require("cors");
+
 router.use(cors());
 router.use(checkAuth);
 
