@@ -94,6 +94,9 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
         { $push: { cosas: cosaGuardada._id } },
         { new: true }
       );
+    } else {
+      res.json({ message: "Debe de estar en alguna ubicación" });
+      return next();
     }
 
     res.json(cosaGuardada);
