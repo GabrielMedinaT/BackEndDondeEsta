@@ -4,6 +4,9 @@ const router = express.Router();
 const Caja = require("../models/model-cajas");
 const Cosa = require("../models/model-cosas");
 const Usuario = require("../models/model-usuario");
+const cors = require("cors");
+
+router.use(cors());
 
 router.get("/", async (req, res) => {
   try {

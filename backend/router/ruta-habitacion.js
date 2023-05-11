@@ -8,6 +8,9 @@ const Caja = require("../models/model-cajas");
 const express = require("express");
 const router = express.Router();
 const autorizacion = require("../middleware/checkAuth");
+const cors = require("cors");
+
+router.use(cors());
 
 router.use(autorizacion);
 
