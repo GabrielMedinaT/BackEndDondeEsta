@@ -4,13 +4,13 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/checkAuth");
 const router = express.Router();
-const cors = require("cors");
 const autorizacion = require("../middleware/checkAuth");
 require("dotenv").config();
+const cors = require("cors");
 
 router.use(
   cors({
-    origin: "http://localhost:3000/",
+    origin: "http:/localhost:3000/",
     credentials: true,
   })
 );
