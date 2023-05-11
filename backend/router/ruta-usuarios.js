@@ -8,12 +8,7 @@ const autorizacion = require("../middleware/checkAuth");
 require("dotenv").config();
 const cors = require("cors");
 
-router.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+router.use(cors());
 
 // * Crear nuevo usuario
 router.post("/registro", async (req, res, next) => {
