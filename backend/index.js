@@ -12,8 +12,7 @@ const cajones = require("./router/ruta-cajones");
 const cosas = require("./router/ruta-cosas");
 const caja = require("./router/ruta-caja");
 const cors = require("cors");
-const proxy = require("./setupProxy");
-app.use(proxy);
+
 app.use(cors());
 app.use("/api/usuarios", usuario);
 app.use("/api/casas/", casa);
