@@ -25,6 +25,16 @@ router.get("/", autorizacion, async (req, res) => {
   }
 });
 
+router.get("/cosas/:nombre", autorizacion, async (req, res) => {
+  const { nombre } = req.params;
+  try {
+    const cosas = await Cosa.find({ nombre: nombre });
+    res.send(cosas);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+
 router.get("/clase/:clase", autorizacion, async (req, res) => {
   const { clase } = req.params;
   try {
