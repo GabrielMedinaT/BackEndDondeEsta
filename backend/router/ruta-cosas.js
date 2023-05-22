@@ -25,7 +25,7 @@ router.get("/", autorizacion, async (req, res) => {
   }
 });
 
-router.get("/cosas/:nombre", autorizacion, async (req, res) => {
+router.get("/buscar/:nombre", autorizacion, async (req, res) => {
   const { nombre } = req.params;
   try {
     const cosas = await Cosa.find({ nombre: nombre });
