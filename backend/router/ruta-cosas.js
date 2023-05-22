@@ -29,9 +29,13 @@ router.get("/buscar/:nombre", autorizacion, async (req, res) => {
   const { nombre } = req.params;
   try {
     const cosas = await Cosa.find({ nombre: nombre });
-    res.send(cosas);
+    if (cosas.length === 0) {
+      res.status(404).json({ message: "No se ha encontrado ningún resultado" });
+    } else {
+      res.send(cosas);
+    }
   } catch (err) {
-    res.json({ message: err });
+    res.status(500).json({ message: "Ha ocurrido un error en el servidor" });
   }
 });
 
