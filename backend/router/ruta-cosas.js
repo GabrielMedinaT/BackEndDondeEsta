@@ -188,13 +188,16 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const existeHabitacionActual = await Habitacion.findById(
     existeCosa.habitacion
   );
-  const nombreHabitacionActual = existeHabitacionActual.nombre;
-
+  const nombreHabitacionActual = existeHabitacionActual
+    ? existeHabitacionActual.nombre
+    : null;
   const existeArmarioActual = await Armario.findById(existeCosa.armario);
-  const nombreArmarioActual = existeArmarioActual.nombre;
+  const nombreArmarioActual = existeArmarioActual
+    ? existeArmarioActual.nombre
+    : null;
 
   const existeCajonActual = await Cajon.findById(existeCosa.cajon);
-  const nombreCajonActual = existeCajonActual.nombre;
+  const nombreCajonActual = existeCajonActual ? existeCajonActual.nombre : null;
 
   if (existeCajon) {
     await Cajon.findByIdAndUpdate(existeCajon._id, {
