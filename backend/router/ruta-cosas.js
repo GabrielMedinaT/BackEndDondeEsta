@@ -25,6 +25,20 @@ router.get("/", autorizacion, async (req, res) => {
   }
 });
 
+router.get("/buscar/:nombre", autorizacion, async (req, res) => {
+  const { nombre } = req.params;
+  try {
+    const cosas = await Cosa.find({ nombre: nombre });
+    if (cosas.length === 0) {
+      res.status(404).json({ message: "No se ha encontrado ningún resultado" });
+    } else {
+      res.send(cosas);
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Ha ocurrido un error en el servidor" });
+  }
+});
+
 router.get("/clase/:clase", autorizacion, async (req, res) => {
   const { clase } = req.params;
   try {
@@ -43,6 +57,10 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
     nombre,
     descripcion,
     clasificacion,
+    nombreCajon,
+    nombreArmario,
+    nombreHabitacion,
+    nombreCasa,
     cajon,
     armario,
     habitacion,
@@ -58,6 +76,10 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
     nombre,
     descripcion,
     clasificacion,
+    nombreCajon: existeCajon ? existeCajon.nombre : null,
+    nombreArmario: existeArmario ? existeArmario.nombre : null,
+    nombreHabitacion: existeHabitacion ? existeHabitacion.nombre : null,
+    nombreCasa: existeCasa.nombre,
     cajon: existeCajon ? existeCajon._id : null,
     armario: existeArmario ? existeArmario._id : null,
     habitacion: existeHabitacion ? existeHabitacion._id : null,
