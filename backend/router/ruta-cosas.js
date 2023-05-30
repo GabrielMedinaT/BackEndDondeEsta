@@ -137,7 +137,9 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
     res.json({ message: "La cosa no existe" });
     return;
   }
+
   let existeCajon, existeArmario, existeHabitacion, existeCasa;
+
   if (cajon) {
     existeCajon = await Cajon.findOne({ nombre: cajon });
     if (!existeCajon) {
@@ -169,8 +171,9 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
       return;
     }
   }
+
   await Cajon.findByIdAndUpdate(existeCosa.cajon, {
-    $pull: { cosas: existeCosa._id, new: true },
+    $pull: { cosas: existeCosa._id },
   });
   await Armario.findByIdAndUpdate(existeCosa.armario, {
     $pull: { cosas: existeCosa._id },
@@ -181,6 +184,18 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   await Casa.findByIdAndUpdate(existeCosa.casa, {
     $pull: { cosas: existeCosa._id },
   });
+
+  const existeHabitacionActual = await Habitacion.findById(
+    existeCosa.habitacion
+  );
+  const nombreHabitacionActual = existeHabitacionActual.nombre;
+
+  const existeArmarioActual = await Armario.findById(existeCosa.armario);
+  const nombreArmarioActual = existeArmarioActual.nombre;
+
+  const existeCajonActual = await Cajon.findById(existeCosa.cajon);
+  const nombreCajonActual = existeCajonActual.nombre;
+
   if (existeCajon) {
     await Cajon.findByIdAndUpdate(existeCajon._id, {
       $push: { cosas: existeCosa._id },
@@ -188,11 +203,13 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   } else {
     await Cosa.findByIdAndUpdate(existeCosa._id, {
       cajon: null,
+      nombreCajon: null,
     });
-    await Cajon.findOneAndUpdate(existeCosa.cajon, {
+    Cosa.findByIdAndUpdate(existeCosa.cajon, {
       $pull: { cosas: existeCosa._id },
     });
   }
+
   if (existeArmario) {
     await Armario.findByIdAndUpdate(existeArmario._id, {
       $push: { cosas: existeCosa._id },
@@ -200,11 +217,13 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   } else {
     await Cosa.findByIdAndUpdate(existeCosa._id, {
       armario: null,
+      nombreArmario: null,
     });
-    await Armario.findOneAndUpdate(existeCosa.armario, {
+    await Armario.findByIdAndUpdate(existeCosa.armario, {
       $pull: { cosas: existeCosa._id },
     });
   }
+
   if (existeHabitacion) {
     await Habitacion.findByIdAndUpdate(existeHabitacion._id, {
       $push: { cosas: existeCosa._id },
@@ -212,24 +231,37 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   } else {
     await Cosa.findByIdAndUpdate(existeCosa._id, {
       habitacion: null,
+      nombreHabitacion: null,
     });
-    await Habitacion.findOneAndUpdate(existeCosa.habitacion, {
+    await Habitacion.findByIdAndUpdate(existeCosa.habitacion, {
       $pull: { cosas: existeCosa._id },
     });
   }
+
   await Casa.findByIdAndUpdate(existeCasa._id, {
     $push: { cosas: existeCosa._id },
   });
+
+  const nuevaHabitacion = await Habitacion.findOne({ nombre: habitacion });
+  const nuevoArmario = await Armario.findOne({ nombre: armario });
+  const nuevoCajon = await Cajon.findOne({ nombre: cajon });
+
+  await Cosa.findByIdAndUpdate(existeCosa._id, {
+    habitacion: nuevaHabitacion ? nuevaHabitacion._id : null,
+    armario: nuevoArmario ? nuevoArmario._id : null,
+    cajon: nuevoCajon ? nuevoCajon._id : null,
+    nombreHabitacion: nuevaHabitacion ? nuevaHabitacion.nombre : null,
+    nombreArmario: nuevoArmario ? nuevoArmario.nombre : null,
+    nombreCajon: nuevoCajon ? nuevoCajon.nombre : null,
+  });
+
   try {
     await Cosa.findByIdAndUpdate(existeCosa._id, {
-      cajon: existeCajon ? existeCajon._id : undefined,
-      armario: existeArmario ? existeArmario._id : undefined,
-      habitacion: existeHabitacion ? existeHabitacion._id : undefined,
       casa: existeCasa ? existeCasa._id : undefined,
     });
     res.json({ message: "Cosa modificada" });
   } catch (err) {
-    res.json({ message: "error, no se pudo modificar " });
+    res.json({ message: "Error, no se pudo modificar" });
   }
 });
 
