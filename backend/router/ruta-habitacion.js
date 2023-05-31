@@ -31,7 +31,7 @@ router.get("/", autorizacion, async (req, res, next) => {
 //* HABITACIONES
 router.post("/nueva", autorizacion, async (req, res, next) => {
   const usuarioId = req.datosUsuario.userId;
-  const { casa, nombre } = req.body;
+  const { tipo, casa, nombre } = req.body;
   const casabuscar = await Casa.findOne({ nombre: casa, usuario: usuarioId });
   try {
     if (!casabuscar) {
@@ -41,6 +41,7 @@ router.post("/nueva", autorizacion, async (req, res, next) => {
       return;
     }
     const habitacion = new Habitacion({
+      tipo,
       casa: casabuscar._id,
       nombre,
       usuario: usuarioId,
