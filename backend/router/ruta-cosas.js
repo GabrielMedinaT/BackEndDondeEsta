@@ -131,7 +131,7 @@ router.post("/nuevo", autorizacion, async (req, res, next) => {
 
 router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const { nombre } = req.params;
-  const { cajon, armario, habitacion, casa } = req.body;
+  const { nombrecosa, cajon, armario, habitacion, casa } = req.body;
   let existeCosa = await Cosa.findOne({ nombre: nombre });
   if (!existeCosa) {
     res.json({ message: "La cosa no existe" });
@@ -250,6 +250,7 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const nuevoCajon = await Cajon.findOne({ nombre: cajon });
 
   await Cosa.findByIdAndUpdate(existeCosa._id, {
+    nombre: nombrecosa ? nombrecosa : existeCosa.nombre,
     habitacion: nuevaHabitacion ? nuevaHabitacion._id : null,
     armario: nuevoArmario ? nuevoArmario._id : null,
     cajon: nuevoCajon ? nuevoCajon._id : null,

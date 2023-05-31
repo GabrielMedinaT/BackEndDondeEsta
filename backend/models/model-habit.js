@@ -3,6 +3,10 @@ const Casa = require("../models/model-casa");
 const Armarios = require("../models/model-armario");
 
 const habitacionSchema = new mongoose.Schema({
+  tipo: {
+    type: String,
+    required: true,
+  },
   casa: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Casa",
