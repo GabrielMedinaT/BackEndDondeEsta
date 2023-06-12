@@ -62,35 +62,44 @@ router.patch("/editar/:nombre", autorizacion, async (req, res, next) => {
   const { nombre } = req.params;
   const { nuevoNombre } = req.body;
   const usuarioId = req.datosUsuario.userId;
+
   if (!nuevoNombre || nuevoNombre.trim() === "") {
     const error = new Error("El nuevo nombre no puede estar vacío");
     error.statusCode = 422;
     return next(error);
   }
-  let existeHabitacion;
+
+  let habitacion;
   try {
-    existeHabitacion = await Habitacion.findOne(
-      { nombre: nombre },
-      { usuario: usuarioId }
-    );
+    habitacion = await Habitacion.findOne({
+      nombre: nombre,
+      usuario: usuarioId,
+    });
   } catch (err) {
     const error = new Error("No se pudo encontrar la habitación");
     error.statusCode = 500;
     return next(error);
   }
-  if (!existeHabitacion) {
+
+  if (!habitacion) {
     const error = new Error("No existe la habitación");
     error.statusCode = 404;
     return next(error);
   }
+
   try {
     const habitacion = await Habitacion.findOneAndUpdate(
       { nombre: nombre },
       { $set: { nombre: nuevoNombre } },
       { new: true }
     );
+    const result = await Armarios.updateMany(
+      { habitacion: habitacion._id },
+      { $set: { nombreHabitacion: nuevoNombre } }
+    );
     res.json(habitacion);
   } catch (err) {
+    console.log("Ocurrió un error: ", err);
     const error = new Error("No se pudo actualizar la habitación");
     error.statusCode = 500;
     return next(error);
